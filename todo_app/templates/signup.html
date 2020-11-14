@@ -1,4 +1,18 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1>Welcome to sign up page</h1>
+
+<div class="col-lg-5 shadow mx-auto p-0 mt-5">
+    <div class="alert alert-success">
+        <h2>Create an account</h2>
+    </div>
+    <div class="p-4">
+        <form action="" method="post">
+            {% csrf_token %}
+            {{ form.as_p}}
+            <br>
+            <input class="btn btn-info" type="submit" value="Create Account">
+        </form>
+    </div>
+</div>
+
 {% endblock %}
