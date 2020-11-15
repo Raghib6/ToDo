@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<div class="container pt-4">
+<div class="container pt-4 ml-6">
    <div class="row">
       <div class="col-lg-4 shadow mx-auto p-0 mt-5">
          <div class="alert alert-info">
              <h2>Add New To-Do</h2>
          </div>
          <div class="p-4">
-             <form action="" method="post">
+             <form action="/add_todo/" method="post">
                  {% csrf_token %}
                  {{ form.as_p }}
                  <br>
@@ -16,38 +16,58 @@
              </form>
          </div>
      </div>
-      <div class="col ml-5">
-         <div class="border">
-         {% if todos|length == 0 %}
+     <div class="col ml-5 mt-5">
+      <div class="border">
+
+        {% if todos|length == 0 %}
+
+        <div class="p-4">
+          <br><br>
             <div class="alert alert-info text-center">
-               <p class="display-4">
-                  No Todos
-               </p>
+               <p class="" style="font-size: 30px;">No Todos</p>
             </div>
+         <br><br>
+        </div>
          {% else %}
             <div>
                <table class="table">
                   <tr>
                      <th>S. No</th>
                      <th>Title</th>
-                     <th>Priority</th>
                      <th>Status</th>
-                     <th>Remove</th>
+                     <th>Priority</th>
+                     <th>Actions</th>
                   </tr>
                   {% for todo in todos %}
-                  <tr>
-                     <td>{{ forloop.counter }}</td>
-                     <td>{{ todo.title }}</td>
-                     <td>{{ todo.priority }}</td>
-                     <td>{{ todo.status }}</td>
-                     <td><a class="btn btn-danger" href="{% url 'delete_todo' todo.id %}">Remove</a></td>
-                  </tr>
-                  {% endfor %}
-               </table>
-            </div>
-         </div>
-         {% endif %}
-      </div>     
-   </div>
+                <tr>
+                  <td>{{ forloop.counter }}</td>
+                  <td>{{ todo.title }}</td>
+                  <td>
+                    {% if todo.status == 'Completed' %}
+                    Completed
+                    {% else %}
+                    Pending
+                    {% endif %}
+                  </td>
+                  <td>{{todo.priority}}</td>
+                  <td>
+                    <a href="{% url 'delete_todo' todo.id %}" title="Delete" class="">🗑️</a>
+                    {% if todo.status == 'Pending'%}
+                    <a href="/change_status/{{todo.id}}/Completed" title="Mark Completed" class="">✅</a>
+                    {% else %}
+                    <a href="/change_status/{{todo.id}}/Pending" title="Mark Pending" class="">🕒</a>
+                    {% endif %}
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% endif %}
+
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}

@@ -20,7 +20,7 @@ def homeVu(request):
     return render(request,'index.html',context)
 
 @login_required(login_url='login')
-def todoVu(request):
+def add_todos(request):
     if request.user.is_authenticated:
         user = request.user
         form = TodoForm(request.POST)
@@ -28,12 +28,10 @@ def todoVu(request):
             todo = form.save(commit=False)
             todo.user = user
             todo.save()
-            return redirect('homepage')
-        
-    context ={
-        'form':form,
-    }
-    return render(request,'index.html',context)
+            print(todo)
+            return redirect("homepage")
+        else: 
+            return render(request ,'index.html' , context={'form' : form})
 
 def signupVu(request):
     form = UserCreationForm()
@@ -74,10 +72,15 @@ def logoutVu(request):
 
 def deleteVu(request,pk):
     todo = Todo.objects.get(id=pk).delete()
-    return redirect('')
+    return redirect('homepage')
     context = {
         'todo': todo,
     }
     return render(request,'index.html',context)
 
+def statusVu(request,pk,status):
+    todo = Todo.objects.get(id=pk)
+    todo.status = status
+    todo.save()
+    return redirect("homepage")
     
